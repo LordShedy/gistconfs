@@ -1,0 +1,4 @@
+HOME="/home/benes"
+
+# “At every 59th minute past every hour.” 
+0 */1 * * * /usr/bin/python3 /home/benes/Development/automated_configs/automated_configs.py >> $HOME/cron.log 2>&1
