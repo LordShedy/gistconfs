@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests, sys, datetime
+import requests, sys, datetime, time
 
 from jlav import loadAndValidateJSONfile
 
-from time import gmtime, strftime
+from time import localtime, strftime
 
 from var_dump import var_dump
 """
@@ -44,10 +44,12 @@ def getRawURL(inputObject: dict, fileName: str, gistID: str) -> str:
 """
 This function serves for formalized logging
 """
-def printlog(logText: str, dateTimeFormat = "%d-%m-%Y %H:%M:%S") -> str:
-    return print("Automated Configs [" + strftime(dateTimeFormat, gmtime()) + "] " + logText)
+def printlog(appName: str, logText: str, dateTimeFormat = "%d-%m-%Y %H:%M:%S %Z %z") -> str:
+    return print("[{}]; [{}]; ({}); {}".format(strftime(dateTimeFormat, localtime()),time.time() , appName, logText ))
+
 
 def main():
+    appName = "Gistconfs"
     try:
         cred = loadAndValidateJSONfile("automated_configs_credentials.json", "automated_configs_credentials.schema")
         r = requests.get("https://api.github.com/users/LordShedy/gists", auth=(cred['username'],cred['token'])).json()
@@ -63,10 +65,10 @@ def main():
             local = readFile(path)
             if origin != local:
                 var_dump(writeIntoFile(path, origin))
-                return printlog("There has been a newer version of this config, the file has been updated.")
+                return printlog(appName, "There has been a newer version of this config, the file has been updated.")
             else:
-                return printlog("This config file is the same as at the origin, nothing has been changed.")
-        return printlog("There are no configs to be synchronized, nothing to do.")
+                return printlog(appName, "This config file is the same as at the origin, nothing has been changed.")
+        return printlog(appName, "There are no configs to be synchronized, nothing to do.")
 
 if __name__ == "__main__":
     main()
