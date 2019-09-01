@@ -67,8 +67,8 @@ def main():
             else:
                 printlog(appName, instanceHash, "File ({}) is the same as at the origin, nothing has been changed.".format(path))
         if fv == 0:
-            return printlog(appName, instanceHash, "There are no configs to be synchronized, nothing else to do.")
-        return printlog(appName, instanceHash, "All configs were synchronized, nothing else to do.")
+            return printlog(appName, instanceHash, "No configs were newly synchronized, nothing else to do.")
+        return printlog(appName, instanceHash, "All newer configs were synchronized, nothing else to do.")
 
 if __name__ == "__main__":
     main()
